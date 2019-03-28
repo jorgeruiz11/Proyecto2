@@ -1,0 +1,28 @@
+TERMINOS
+
+Sean r $\in$ TERM, $\sigma$ un estado de las variables, $[\vec{x} := \vec{t}]$ una sustitución y $m_1,...m_n \in M$ tales que $I_\sigma (t_i) = m_i$ donde $1 \leq i \leq n$, entonces: \\
+
+\begin{center}
+    $I_\sigma (r [\vec{x} := \vec{t}]) = I_{\sigma [\vec{x} / \vec{m}]}(r) $.
+\end{center}
+
+
+
+FORMULAS
+
+Sean r $\in$ TERM, $\sigma$ un estado de las variables, $[\vec{x} := \vec{t}]$ una sustitución y $m_1,...m_n \in M$ tales que $m_i = I_\sigma (t_i)$ donde $1 \leq i \leq n$, entonces:
+\\
+\begin{center}
+    $I_\sigma (\varphi [\vec{x} := \vec{t}]) = I_{\sigma [\vec{x} / \vec{m}]}(r) $    
+\end{center}
+
+
+
+
+FALTAN:
+
+2 Introducción 
+d Sección-sintaxis
+c Sección-Sustitución
+b Sección-Semantica semana2
+
