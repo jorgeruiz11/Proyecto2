@@ -30,7 +30,7 @@ iP m p l = case p of
 est = id :: Int -> Int
 
 main = do
-  let m = 3
+  let m = 12
   let u = [0..(m-1)]
   let phi = All 1 ( (Imp ( Neg ( Eq (V 1) (F "0" []) ) ) (Ex 2 (Eq (F "p" [(V 1), (V 2)]) (F "1" []) ) ) ) )
 

@@ -3,8 +3,11 @@ module AlgMM where
 import Syntax
 import Data.List
 
+
+--Simplifica una sustitución.
 simpSus :: Subst -> Subst
-simpSus sus = [(x, t) | (x, t) <- sus, V x /= t]
+simpSus sus = [(x, t) | (x, t) <- sus, V x /= t]  -- Verifica que nos queden igual
+                                                  -- después de la sustitución.
 
 
 {--

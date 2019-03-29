@@ -5,3 +5,7 @@ mjhl1999@ciencias.unam.mx
 Ruiz López Jorge Antonio
 315119729
 jorgeruiz@ciencias.unam.mx
+
+
+Liga del proyecto2:
+https://github.com/jorgeruiz11/Proyecto2.git
