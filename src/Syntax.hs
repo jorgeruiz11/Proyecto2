@@ -2,10 +2,10 @@ module Syntax where
 
 import Data.List
 
--- Toma el indice y lo define las variables como enteros.
+-- Los indices los definimos como enteros para poder usarlos como variables.
 type Ind = Int
 
--- El nombre.
+-- El nombre de una función o un predicado es una cadena.
 type Nombre = String
 
 -- Define los términos como una variable o una función de n términos. (v in V)
@@ -30,16 +30,15 @@ data Form = TrueF
 fv :: Form -> [Ind]
 fv TrueF = []
 fv FalseF = []
-fv (Pr _ ts) = concat[varT t | t <- ts]
+fv (Pr _ ts) = concat[varT t | t <- ts]           -- Encontramos las variables en su lista de términos
 fv (Eq t1 t2) = union (varT t1) (varT t2)
 fv (Neg phi) = fv phi
 fv (Conj phi psi) = union (fv phi) (fv psi)
 fv (Disy phi psi) = union (fv phi) (fv psi)
 fv (Imp phi psi) = union (fv phi) (fv psi)
 fv (Equiv phi psi) = union (fv phi) (fv psi)
-fv (All x phi) = (fv phi) \\ [x]
+fv (All x phi) = (fv phi) \\ [x]                  --  Encontramos sus variables libres y después eliminamos la variable ligada
 fv (Ex x phi) = (fv phi) \\ [x]
---Porque ya tenemos las variables libres de phi y como x se cuantifica, entonces ya no es libre.
 
 
 -- Recibe un término y nos devuelve una lista de indices (usamos "map" porque
@@ -48,7 +47,8 @@ varT :: Term -> [Ind]
 varT (V x) = [x]
 varT (F _ []) = [] -- "_" representa el nombre.
 -- varT (F _ (t:ts)) = (varT t) ++ concat(map varT ts)
-varT (F _ l) = nub(concat([varT t | t <- l]))
+varT (F _ l) = nub(concat([varT t | t <- l]))   -- Obtenemos las variables en la función y eliminamos los duplicados.
+
 
 -- Función que nos devuelve las varibales ligadas de una formula.
 bv :: Form -> [Ind]
@@ -61,12 +61,12 @@ bv (Conj phi psi) = union (bv phi) (bv psi)
 bv (Disy phi psi) = union (bv phi) (bv psi)
 bv (Imp phi psi) = union (bv phi) (bv psi)
 bv (Equiv phi psi) = union (bv phi) (bv psi)
-bv (All x phi) = union (bv phi) [x]
+bv (All x phi) = union (bv phi) [x]           -- Encontramos las variables ligadas y añadimos la var ligada x.
 bv (Ex x phi) = union (bv phi) [x]
 
 
--- Cerradura de universal.
--- La cerradura añade un cuatificador a cada cosa que no lo tenga.
+-- Cerradura universal.
+-- La cerradura añade un cuatificador universal a cada variable que sea libre en φ.
 aCl :: Form -> Form
 aCl phi = aClaux phi (fv phi)
 
@@ -74,22 +74,29 @@ aCl phi = aClaux phi (fv phi)
 aClaux :: Form -> [Ind] -> Form
 aClaux phi l = case l of
   [] -> phi
-  x:xs -> All x (aClaux phi xs)
+  x:xs -> All x (aClaux phi xs)       -- Dada una variable x, esta función agrega a φ un cuantificador universal que liga a x
+                                      -- y continua recursivamente
 
-  -- Cerradura de existencial.
+
+
+-- Cerradura existencial.
+-- La cerradura añade un cuatificador existencial a cada variable que sea libre en φ.
 eCl :: Form -> Form
 eCl phi = eClaux phi (fv phi)
+
 
 -- Mete el "existe" a cada elemento.
 eClaux :: Form -> [Ind] -> Form
 eClaux phi l = case l of
   [] -> phi
-  x:xs -> Ex x (eClaux phi xs)
+  x:xs -> Ex x (eClaux phi xs)   -- Dada una variable x, esta función agrega a φ un cuantificador existencial que liga a x
+                                 -- y continua recursivamente
 
 
+-- Sustitución de términos. Se define como una lista de (Indice, Término).
 type Subst = [(Ind, Term)]
 
-
+-- Verfica si una sustitución es válida.
 verifSus :: Subst -> Bool
 verifSus s = tieneRep [v | (v,t) <- s]
 
@@ -128,7 +135,7 @@ apsubF phi sus = case phi of
           (xs, tt) = unzip sus
           ts = concat [varT t | t <- tt] -- concat (map varT tt)
 
-
+-- Verifica si hay elementos repetidos en una lista de elementos comparables.
 tieneRep :: (Eq a) => [a] -> Bool
 tieneRep l = case l of
   [] -> False

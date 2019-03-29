@@ -7,7 +7,7 @@ import Syntax
 type IntF a = Nombre -> [a] -> a
 
 -- Definimos la interpretación de predicados como una función que toma un nombre,
--- una lista de elementos del universo y nos dice si los elementos en nuesgtro universo
+-- una lista de elementos del universo y nos dice si los elementos en nuestro universo
 -- se relacionan.
 type IntR a = Nombre -> [a] -> Bool
 
@@ -18,9 +18,7 @@ type Estado a = Ind -> a
 type Estructura a = ([a], IntF a, IntR a)
 
 
--- Actualización de estado. Dado un estado, una variable y un elemento
--- esto nos devuelve el estado actualizado de dicha varibale.
-actEst :: Estado a -> Ind -> a -> Estado a
+
 actEst e x n = ne
   where ne y = if x == y then n else e y
 
